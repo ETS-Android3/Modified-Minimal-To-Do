@@ -1,10 +1,5 @@
 package com.example.avjindersinghsekhon.minimaltodo.AddToDo;
 
-import static android.app.Activity.RESULT_CANCELED;
-import static android.app.Activity.RESULT_OK;
-import static android.content.Context.INPUT_METHOD_SERVICE;
-import static android.content.Context.MODE_PRIVATE;
-
 import android.animation.Animator;
 import android.content.ClipData;
 import android.content.ClipboardManager;
@@ -33,10 +28,12 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.content.ClipboardManager;
 import android.widget.Toast;
 
 import com.example.avjindersinghsekhon.minimaltodo.Analytics.AnalyticsApplication;
 import com.example.avjindersinghsekhon.minimaltodo.AppDefault.AppDefaultFragment;
+import com.example.avjindersinghsekhon.minimaltodo.Main.MainActivity;
 import com.example.avjindersinghsekhon.minimaltodo.Main.MainFragment;
 import com.example.avjindersinghsekhon.minimaltodo.R;
 import com.example.avjindersinghsekhon.minimaltodo.Utility.ToDoItem;
@@ -48,49 +45,51 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 
+import static android.app.Activity.RESULT_CANCELED;
+import static android.app.Activity.RESULT_OK;
+import static android.content.Context.INPUT_METHOD_SERVICE;
+import static android.content.Context.MODE_PRIVATE;
+
 public class AddToDoFragment extends AppDefaultFragment implements DatePickerDialog.OnDateSetListener, TimePickerDialog.OnTimeSetListener {
-    public static final String DATE_FORMAT = "MMM d, yyyy";
-    public static final String DATE_FORMAT_MONTH_DAY = "MMM d";
-    public static final String DATE_FORMAT_TIME = "H:m";
     private static final String TAG = "AddToDoFragment";
-    AnalyticsApplication app;
     private Date mLastEdited;
+
     private EditText mToDoTextBodyEditText;
     private EditText mToDoTextBodyDescription;
+
     private SwitchCompat mToDoDateSwitch;
     //    private TextView mLastSeenTextView;
     private LinearLayout mUserDateSpinnerContainingLinearLayout;
     private TextView mReminderTextView;
+
     private String CombinationText;
+
     private EditText mDateEditText;
     private EditText mTimeEditText;
-    private String[] mDefaultTimeOptions12H;
-    private String[] mDefaultTimeOptions24H;
+    private String mDefaultTimeOptions12H[];
+    private String mDefaultTimeOptions24H[];
+
     private Button mChooseDateButton;
     private Button mChooseTimeButton;
     private Button mCopyClipboard;
+
     private ToDoItem mUserToDoItem;
     private FloatingActionButton mToDoSendFloatingActionButton;
+    public static final String DATE_FORMAT = "MMM d, yyyy";
+    public static final String DATE_FORMAT_MONTH_DAY = "MMM d";
+    public static final String DATE_FORMAT_TIME = "H:m";
+
     private String mUserEnteredText;
     private String mUserEnteredDescription;
     private boolean mUserHasReminder;
     private Toolbar mToolbar;
     private Date mUserReminderDate;
     private int mUserColor;
-    private final boolean setDateButtonClickedOnce = false;
-    private final boolean setTimeButtonClickedOnce = false;
+    private boolean setDateButtonClickedOnce = false;
+    private boolean setTimeButtonClickedOnce = false;
     private LinearLayout mContainerLayout;
     private String theme;
-    private LinearLayout mLinearLayout;
-
-    public static String formatDate(String formatString, Date dateToFormat) {
-        SimpleDateFormat simpleDateFormat = new SimpleDateFormat(formatString);
-        return simpleDateFormat.format(dateToFormat);
-    }
-
-    public static AddToDoFragment newInstance() {
-        return new AddToDoFragment();
-    }
+    AnalyticsApplication app;
 
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
@@ -101,14 +100,15 @@ public class AddToDoFragment extends AppDefaultFragment implements DatePickerDia
         ImageButton reminderIconImageButton;
         TextView reminderRemindMeTextView;
 
+
         theme = getActivity().getSharedPreferences(MainFragment.THEME_PREFERENCES, MODE_PRIVATE).getString(MainFragment.THEME_SAVED, MainFragment.LIGHTTHEME);
         if (theme.equals(MainFragment.LIGHTTHEME)) {
             getActivity().setTheme(R.style.CustomStyle_LightTheme);
             Log.d("OskarSchindler", "Light Theme");
         } else {
-            Log.d("OskarSchindler", "Dark Theme");
             getActivity().setTheme(R.style.CustomStyle_DarkTheme);
         }
+
 
         //Show an X in place of <-
         final Drawable cross = getResources().getDrawable(R.drawable.ic_clear_white_24dp);
@@ -124,14 +124,18 @@ public class AddToDoFragment extends AppDefaultFragment implements DatePickerDia
             ((AppCompatActivity) getActivity()).getSupportActionBar().setDisplayShowTitleEnabled(false);
             ((AppCompatActivity) getActivity()).getSupportActionBar().setDisplayHomeAsUpEnabled(true);
             ((AppCompatActivity) getActivity()).getSupportActionBar().setHomeAsUpIndicator(cross);
+
         }
 
+
         mUserToDoItem = (ToDoItem) getActivity().getIntent().getSerializableExtra(MainFragment.TODOITEM);
+
         mUserEnteredText = mUserToDoItem.getToDoText();
         mUserEnteredDescription = mUserToDoItem.getmToDoDescription();
         mUserHasReminder = mUserToDoItem.hasReminder();
         mUserReminderDate = mUserToDoItem.getToDoDate();
         mUserColor = mUserToDoItem.getTodoColor();
+
 
 //        if(mUserToDoItem.getLastEdited()==null) {
 //            mLastEdited = new Date();
@@ -140,25 +144,28 @@ public class AddToDoFragment extends AppDefaultFragment implements DatePickerDia
 //            mLastEdited = mUserToDoItem.getLastEdited();
 //        }
 
+
         reminderIconImageButton = (ImageButton) view.findViewById(R.id.userToDoReminderIconImageButton);
         reminderRemindMeTextView = (TextView) view.findViewById(R.id.userToDoRemindMeTextView);
-        mLinearLayout = (LinearLayout) view.findViewById(R.id.addToDoParentLinearLayout);
         if (theme.equals(MainFragment.DARKTHEME)) {
             reminderIconImageButton.setImageDrawable(getResources().getDrawable(R.drawable.ic_alarm_add_white_24dp));
             reminderRemindMeTextView.setTextColor(Color.WHITE);
-            mLinearLayout.setBackgroundColor(getResources().getColor(R.color.mdtp_dark_gray));
         }
+
+
 
         //Button for Copy to Clipboard
         mCopyClipboard = (Button) view.findViewById(R.id.copyclipboard);
+
         mContainerLayout = (LinearLayout) view.findViewById(R.id.todoReminderAndDateContainerLayout);
         mUserDateSpinnerContainingLinearLayout = (LinearLayout) view.findViewById(R.id.toDoEnterDateLinearLayout);
         mToDoTextBodyEditText = (EditText) view.findViewById(R.id.userToDoEditText);
-        mToDoTextBodyDescription = (EditText) view.findViewById(R.id.userToDoDescription);
+        mToDoTextBodyDescription= (EditText) view.findViewById(R.id.userToDoDescription);
         mToDoDateSwitch = (SwitchCompat) view.findViewById(R.id.toDoHasDateSwitchCompat);
 //        mLastSeenTextView = (TextView)findViewById(R.id.toDoLastEditedTextView);
         mToDoSendFloatingActionButton = (FloatingActionButton) view.findViewById(R.id.makeToDoFloatingActionButton);
         mReminderTextView = (TextView) view.findViewById(R.id.newToDoDateTimeReminderTextView);
+
 
         //OnClickListener for CopyClipboard Button
         mCopyClipboard.setOnClickListener(new View.OnClickListener() {
@@ -174,6 +181,11 @@ public class AddToDoFragment extends AppDefaultFragment implements DatePickerDia
             }
         });
 
+
+
+
+
+
         mContainerLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -181,6 +193,7 @@ public class AddToDoFragment extends AppDefaultFragment implements DatePickerDia
                 hideKeyboard(mToDoTextBodyDescription);
             }
         });
+
 
         if (mUserHasReminder && (mUserReminderDate != null)) {
 //            mUserDateSpinnerContainingLinearLayout.setVisibility(View.VISIBLE);
@@ -202,6 +215,7 @@ public class AddToDoFragment extends AppDefaultFragment implements DatePickerDia
         imm.toggleSoftInput(InputMethodManager.SHOW_FORCED, InputMethodManager.HIDE_IMPLICIT_ONLY);
         mToDoTextBodyEditText.setSelection(mToDoTextBodyEditText.length());
 
+
         mToDoTextBodyEditText.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -215,13 +229,10 @@ public class AddToDoFragment extends AppDefaultFragment implements DatePickerDia
             @Override
             public void afterTextChanged(Editable s) {
             }
-
         });
-
         mToDoTextBodyDescription.setText(mUserEnteredDescription);
         mToDoTextBodyDescription.setSelection(mToDoTextBodyDescription.length());
         mToDoTextBodyDescription.addTextChangedListener(new TextWatcher() {
-
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
 
@@ -230,12 +241,12 @@ public class AddToDoFragment extends AppDefaultFragment implements DatePickerDia
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 mUserEnteredDescription = s.toString();
-            }
+                    }
 
-            @Override
-            public void afterTextChanged(Editable s) {
-            }
-        });
+                    @Override
+                    public void afterTextChanged(Editable s) {
+                    }
+                });
 
 
 //        String lastSeen = formatDate(DATE_FORMAT, mLastEdited);
@@ -251,6 +262,7 @@ public class AddToDoFragment extends AppDefaultFragment implements DatePickerDia
                     app.send(this, "Action", "Reminder Set");
                 } else {
                     app.send(this, "Action", "Reminder Removed");
+
                 }
 
                 if (!isChecked) {
@@ -283,8 +295,10 @@ public class AddToDoFragment extends AppDefaultFragment implements DatePickerDia
             }
         });
 
+
         mDateEditText = (EditText) view.findViewById(R.id.newTodoDateEditText);
         mTimeEditText = (EditText) view.findViewById(R.id.newTodoTimeEditText);
+
         mDateEditText.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -303,17 +317,21 @@ public class AddToDoFragment extends AppDefaultFragment implements DatePickerDia
                 int month = calendar.get(Calendar.MONTH);
                 int day = calendar.get(Calendar.DAY_OF_MONTH);
 
+
                 DatePickerDialog datePickerDialog = DatePickerDialog.newInstance(AddToDoFragment.this, year, month, day);
                 if (theme.equals(MainFragment.DARKTHEME)) {
                     datePickerDialog.setThemeDark(true);
                 }
                 datePickerDialog.show(getActivity().getFragmentManager(), "DateFragment");
+
             }
         });
+
 
         mTimeEditText.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
                 Date date;
                 hideKeyboard(mToDoTextBodyEditText);
                 if (mUserToDoItem.getToDoDate() != null) {
@@ -338,6 +356,8 @@ public class AddToDoFragment extends AppDefaultFragment implements DatePickerDia
 //        mDefaultTimeOptions12H = new String[]{"9:00 AM", "12:00 PM", "3:00 PM", "6:00 PM", "9:00 PM", "12:00 AM"};
 //        mDefaultTimeOptions24H = new String[]{"9:00", "12:00", "15:00", "18:00", "21:00", "24:00"};
         setDateAndTimeEditText();
+
+//
 
 //        mChooseDateButton = (Button)findViewById(R.id.newToDoChooseDateButton);
 //        mChooseTimeButton = (Button)findViewById(R.id.newToDoChooseTimeButton);
@@ -391,20 +411,24 @@ public class AddToDoFragment extends AppDefaultFragment implements DatePickerDia
 //                timePickerDialog.show(getFragmentManager(), "TimeFragment");
 //            }
 //        });
+
     }
 
     private void setDateAndTimeEditText() {
+
         if (mUserToDoItem.hasReminder() && mUserReminderDate != null) {
             String userDate = formatDate("d MMM, yyyy", mUserReminderDate);
             String formatToUse;
             if (DateFormat.is24HourFormat(getContext())) {
-                formatToUse = "HH:mm";
+                formatToUse = "k:mm";
             } else {
                 formatToUse = "h:mm a";
+
             }
             String userTime = formatDate(formatToUse, mUserReminderDate);
             mTimeEditText.setText(userTime);
             mDateEditText.setText(userDate);
+
         } else {
             mDateEditText.setText(getString(R.string.date_reminder_default));
 //            mUserReminderDate = new Date();
@@ -420,7 +444,7 @@ public class AddToDoFragment extends AppDefaultFragment implements DatePickerDia
             Log.d("OskarSchindler", "Imagined Date: " + mUserReminderDate);
             String timeString;
             if (time24) {
-                timeString = formatDate("HH:mm", mUserReminderDate);
+                timeString = formatDate("k:mm", mUserReminderDate);
             } else {
                 timeString = formatDate("h:mm a", mUserReminderDate);
             }
@@ -457,6 +481,7 @@ public class AddToDoFragment extends AppDefaultFragment implements DatePickerDia
         InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(INPUT_METHOD_SERVICE);
         imm.hideSoftInputFromWindow(et.getWindowToken(), 0);
     }
+
 
     public void setDate(int year, int month, int day) {
         Calendar calendar = Calendar.getInstance();
@@ -522,7 +547,7 @@ public class AddToDoFragment extends AppDefaultFragment implements DatePickerDia
     public void setTimeEditText() {
         String dateFormat;
         if (DateFormat.is24HourFormat(getContext())) {
-            dateFormat = "HH:mm";
+            dateFormat = "k:mm";
         } else {
             dateFormat = "h:mm a";
 
@@ -545,7 +570,7 @@ public class AddToDoFragment extends AppDefaultFragment implements DatePickerDia
             String amPmString = "";
 
             if (DateFormat.is24HourFormat(getContext())) {
-                timeString = formatDate("HH:mm", date);
+                timeString = formatDate("k:mm", date);
             } else {
                 timeString = formatDate("h:mm", date);
                 amPmString = formatDate("a", date);
@@ -587,6 +612,7 @@ public class AddToDoFragment extends AppDefaultFragment implements DatePickerDia
         getActivity().setResult(result, i);
     }
 
+
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
@@ -602,6 +628,11 @@ public class AddToDoFragment extends AppDefaultFragment implements DatePickerDia
             default:
                 return super.onOptionsItemSelected(item);
         }
+    }
+
+    public static String formatDate(String formatString, Date dateToFormat) {
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat(formatString);
+        return simpleDateFormat.format(dateToFormat);
     }
 
     @Override
@@ -665,13 +696,21 @@ public class AddToDoFragment extends AppDefaultFragment implements DatePickerDia
 
                         @Override
                         public void onAnimationRepeat(Animator animation) {
+
                         }
-                    });
+                    }
+            );
         }
+
     }
+
 
     @Override
     protected int layoutRes() {
         return R.layout.fragment_add_to_do;
+    }
+
+    public static AddToDoFragment newInstance() {
+        return new AddToDoFragment();
     }
 }

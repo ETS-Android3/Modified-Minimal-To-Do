@@ -1,9 +1,5 @@
 package com.example.avjindersinghsekhon.minimaltodo.Main;
 
-import static android.app.Activity.RESULT_CANCELED;
-import static android.content.Context.ALARM_SERVICE;
-import static android.content.Context.MODE_PRIVATE;
-
 import android.app.AlarmManager;
 import android.app.PendingIntent;
 import android.content.Intent;
@@ -22,6 +18,7 @@ import android.support.v7.widget.helper.ItemTouchHelper;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.AccelerateInterpolator;
@@ -32,12 +29,14 @@ import android.widget.TextView;
 
 import com.amulyakhare.textdrawable.TextDrawable;
 import com.amulyakhare.textdrawable.util.ColorGenerator;
+import com.example.avjindersinghsekhon.minimaltodo.About.AboutActivity;
 import com.example.avjindersinghsekhon.minimaltodo.AddToDo.AddToDoActivity;
 import com.example.avjindersinghsekhon.minimaltodo.AddToDo.AddToDoFragment;
 import com.example.avjindersinghsekhon.minimaltodo.Analytics.AnalyticsApplication;
 import com.example.avjindersinghsekhon.minimaltodo.AppDefault.AppDefaultFragment;
 import com.example.avjindersinghsekhon.minimaltodo.R;
 import com.example.avjindersinghsekhon.minimaltodo.Reminder.ReminderFragment;
+import com.example.avjindersinghsekhon.minimaltodo.Settings.SettingsActivity;
 import com.example.avjindersinghsekhon.minimaltodo.Utility.ItemTouchHelperClass;
 import com.example.avjindersinghsekhon.minimaltodo.Utility.RecyclerViewEmptySupport;
 import com.example.avjindersinghsekhon.minimaltodo.Utility.StoreRetrieveData;
@@ -51,58 +50,42 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
 
+import static android.app.Activity.RESULT_CANCELED;
+import static android.content.Context.ALARM_SERVICE;
+import static android.content.Context.MODE_PRIVATE;
+
 public class MainFragment extends AppDefaultFragment {
+    private RecyclerViewEmptySupport mRecyclerView;
+    private FloatingActionButton mAddToDoItemFAB;
+    private ArrayList<ToDoItem> mToDoItemsArrayList;
+    private CoordinatorLayout mCoordLayout;
     public static final String TODOITEM = "com.avjindersinghsekhon.com.avjindersinghsekhon.minimaltodo.MainActivity";
+    private MainFragment.BasicListAdapter adapter;
+    private static final int REQUEST_ID_TODO_ITEM = 100;
+    private ToDoItem mJustDeletedToDoItem;
+    private int mIndexOfDeletedToDoItem;
     public static final String DATE_TIME_FORMAT_12_HOUR = "MMM d, yyyy  h:mm a";
-    public static final String DATE_TIME_FORMAT_24_HOUR = "MMM d, yyyy  HH:mm";
+    public static final String DATE_TIME_FORMAT_24_HOUR = "MMM d, yyyy  k:mm";
     public static final String FILENAME = "todoitems.json";
+    private StoreRetrieveData storeRetrieveData;
+    public ItemTouchHelper itemTouchHelper;
+    private CustomRecyclerScrollViewListener customRecyclerScrollViewListener;
     public static final String SHARED_PREF_DATA_SET_CHANGED = "com.avjindersekhon.datasetchanged";
     public static final String CHANGE_OCCURED = "com.avjinder.changeoccured";
+    private int mTheme = -1;
+    private String theme = "name_of_the_theme";
     public static final String THEME_PREFERENCES = "com.avjindersekhon.themepref";
     public static final String RECREATE_ACTIVITY = "com.avjindersekhon.recreateactivity";
     public static final String THEME_SAVED = "com.avjindersekhon.savedtheme";
     public static final String DARKTHEME = "com.avjindersekon.darktheme";
     public static final String LIGHTTHEME = "com.avjindersekon.lighttheme";
-    private static final int REQUEST_ID_TODO_ITEM = 100;
-    public ItemTouchHelper itemTouchHelper;
-    private RecyclerViewEmptySupport mRecyclerView;
-    private FloatingActionButton mAddToDoItemFAB;
-    private ArrayList<ToDoItem> mToDoItemsArrayList;
-    private CoordinatorLayout mCoordLayout;
-    private MainFragment.BasicListAdapter adapter;
-    private ToDoItem mJustDeletedToDoItem;
-    private int mIndexOfDeletedToDoItem;
-    private StoreRetrieveData storeRetrieveData;
-    private CustomRecyclerScrollViewListener customRecyclerScrollViewListener;
-    private int mTheme = -1;
-    private String theme = "name_of_the_theme";
     private AnalyticsApplication app;
-    private final String[] testStrings = {"Clean my room",
+    private String[] testStrings = {"Clean my room",
             "Water the plants",
             "Get car washed",
             "Get my dry cleaning"
     };
 
-    public static ArrayList<ToDoItem> getLocallyStoredData(StoreRetrieveData storeRetrieveData) {
-        ArrayList<ToDoItem> items = null;
-
-        try {
-            items = storeRetrieveData.loadFromFile();
-
-        } catch (IOException | JSONException e) {
-            e.printStackTrace();
-        }
-
-        if (items == null) {
-            items = new ArrayList<>();
-        }
-        return items;
-
-    }
-
-    public static MainFragment newInstance() {
-        return new MainFragment();
-    }
 
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
@@ -165,7 +148,7 @@ public class MainFragment extends AppDefaultFragment {
             public void onClick(View v) {
                 app.send(this, "Action", "FAB pressed");
                 Intent newTodo = new Intent(getContext(), AddToDoActivity.class);
-                ToDoItem item = new ToDoItem("", "", false, null);
+                ToDoItem item = new ToDoItem("","", false, null);
                 int color = ColorGenerator.MATERIAL.getRandomColor();
                 item.setTodoColor(color);
                 //noinspection ResourceType
@@ -202,10 +185,7 @@ public class MainFragment extends AppDefaultFragment {
         mRecyclerView = (RecyclerViewEmptySupport) view.findViewById(R.id.toDoRecyclerView);
         if (theme.equals(LIGHTTHEME)) {
             mRecyclerView.setBackgroundColor(getResources().getColor(R.color.primary_lightest));
-        } else {
-            mRecyclerView.setBackgroundColor(getResources().getColor(R.color.mdtp_dark_gray));
         }
-
         mRecyclerView.setEmptyView(view.findViewById(R.id.toDoEmptyView));
         mRecyclerView.setHasFixedSize(true);
         mRecyclerView.setItemAnimator(new DefaultItemAnimator());
@@ -239,6 +219,23 @@ public class MainFragment extends AppDefaultFragment {
         mRecyclerView.setAdapter(adapter);
 //        setUpTransitions();
 
+
+    }
+
+    public static ArrayList<ToDoItem> getLocallyStoredData(StoreRetrieveData storeRetrieveData) {
+        ArrayList<ToDoItem> items = null;
+
+        try {
+            items = storeRetrieveData.loadFromFile();
+
+        } catch (IOException | JSONException e) {
+            e.printStackTrace();
+        }
+
+        if (items == null) {
+            items = new ArrayList<>();
+        }
+        return items;
 
     }
 
@@ -313,6 +310,7 @@ public class MainFragment extends AppDefaultFragment {
         }
     }
 
+
     public void addThemeToSharedPreferences(String theme) {
         SharedPreferences sharedPreferences = getActivity().getSharedPreferences(THEME_PREFERENCES, MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPreferences.edit();
@@ -320,42 +318,43 @@ public class MainFragment extends AppDefaultFragment {
         editor.apply();
     }
 
-//    @Override
-//    public boolean onOptionsItemSelected(MenuItem item) {
-//        switch (item.getItemId()) {
-//            case R.id.aboutMeMenuItem:
-//                Intent i = new Intent(getContext(), AboutActivity.class);
-//                startActivity(i);
-//                return true;
-////            case R.id.switch_themes:
-////                if(mTheme == R.style.CustomStyle_DarkTheme){
-////                    addThemeToSharedPreferences(LIGHTTHEME);
-////                }
-////                else{
-////                    addThemeToSharedPreferences(DARKTHEME);
-////                }
-////
-//////                if(mTheme == R.style.CustomStyle_DarkTheme){
-//////                    mTheme = R.style.CustomStyle_LightTheme;
-//////                }
-//////                else{
-//////                    mTheme = R.style.CustomStyle_DarkTheme;
-//////                }
-////                this.recreate();
-////                return true;
-//            case R.id.preferences:
-//                Intent intent = new Intent(getContext(), SettingsActivity.class);
-//                startActivity(intent);
-//                return true;
-//
-//            default:
-//                return super.onOptionsItemSelected(item);
-//        }
-//    }
 
     public boolean onCreateOptionsMenu(Menu menu) {
         getActivity().getMenuInflater().inflate(R.menu.menu_main, menu);
         return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.aboutMeMenuItem:
+                Intent i = new Intent(getContext(), AboutActivity.class);
+                startActivity(i);
+                return true;
+//            case R.id.switch_themes:
+//                if(mTheme == R.style.CustomStyle_DarkTheme){
+//                    addThemeToSharedPreferences(LIGHTTHEME);
+//                }
+//                else{
+//                    addThemeToSharedPreferences(DARKTHEME);
+//                }
+//
+////                if(mTheme == R.style.CustomStyle_DarkTheme){
+////                    mTheme = R.style.CustomStyle_LightTheme;
+////                }
+////                else{
+////                    mTheme = R.style.CustomStyle_DarkTheme;
+////                }
+//                this.recreate();
+//                return true;
+            case R.id.preferences:
+                Intent intent = new Intent(getContext(), SettingsActivity.class);
+                startActivity(intent);
+                return true;
+
+            default:
+                return super.onOptionsItemSelected(item);
+        }
     }
 
     @Override
@@ -422,9 +421,10 @@ public class MainFragment extends AppDefaultFragment {
 
     }
 
+
     public void makeUpItems(ArrayList<ToDoItem> items, int len) {
         for (String testString : testStrings) {
-            ToDoItem item = new ToDoItem(testString, testString, false, new Date());
+            ToDoItem item = new ToDoItem(testString,testString, false, new Date());
             //noinspection ResourceType
 //            item.setTodoColor(getResources().getString(R.color.red_secondary));
             items.add(item);
@@ -432,68 +432,8 @@ public class MainFragment extends AppDefaultFragment {
 
     }
 
-    //Used when using custom fonts
-//    @Override
-//    protected void attachBaseContext(Context newBase) {
-//        super.attachBaseContext(CalligraphyContextWrapper.wrap(newBase));
-//    }
-
-    private void saveDate() {
-        try {
-            storeRetrieveData.saveToFile(mToDoItemsArrayList);
-        } catch (JSONException | IOException e) {
-            e.printStackTrace();
-        }
-
-    }
-
-    @Override
-    public void onPause() {
-        super.onPause();
-        try {
-            storeRetrieveData.saveToFile(mToDoItemsArrayList);
-        } catch (JSONException | IOException e) {
-            e.printStackTrace();
-        }
-    }
-
-
-    @Override
-    public void onDestroy() {
-
-        super.onDestroy();
-        mRecyclerView.removeOnScrollListener(customRecyclerScrollViewListener);
-    }
-
-
-    //    public void setUpTransitions(){
-//        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP){
-//            Transition enterT = new Slide(Gravity.RIGHT);
-//            enterT.setDuration(500);
-//
-//            Transition exitT = new Slide(Gravity.LEFT);
-//            exitT.setDuration(300);
-//
-//            Fade fade = new Fade();
-//            fade.setDuration(500);
-//
-//            getWindow().setExitTransition(fade);
-//            getWindow().setReenterTransition(fade);
-//
-//        }
-//    }
-    @Override
-    protected int layoutRes() {
-        return R.layout.fragment_main;
-    }
-
     public class BasicListAdapter extends RecyclerView.Adapter<BasicListAdapter.ViewHolder> implements ItemTouchHelperClass.ItemTouchHelperAdapter {
-        private final ArrayList<ToDoItem> items;
-
-        BasicListAdapter(ArrayList<ToDoItem> items) {
-
-            this.items = items;
-        }
+        private ArrayList<ToDoItem> items;
 
         @Override
         public void onItemMoved(int fromPosition, int toPosition) {
@@ -614,6 +554,12 @@ public class MainFragment extends AppDefaultFragment {
             return items.size();
         }
 
+        BasicListAdapter(ArrayList<ToDoItem> items) {
+
+            this.items = items;
+        }
+
+
         @SuppressWarnings("deprecation")
         public class ViewHolder extends RecyclerView.ViewHolder {
 
@@ -646,5 +592,64 @@ public class MainFragment extends AppDefaultFragment {
 
 
         }
+    }
+
+    //Used when using custom fonts
+//    @Override
+//    protected void attachBaseContext(Context newBase) {
+//        super.attachBaseContext(CalligraphyContextWrapper.wrap(newBase));
+//    }
+
+    private void saveDate() {
+        try {
+            storeRetrieveData.saveToFile(mToDoItemsArrayList);
+        } catch (JSONException | IOException e) {
+            e.printStackTrace();
+        }
+
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        try {
+            storeRetrieveData.saveToFile(mToDoItemsArrayList);
+        } catch (JSONException | IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+
+    @Override
+    public void onDestroy() {
+
+        super.onDestroy();
+        mRecyclerView.removeOnScrollListener(customRecyclerScrollViewListener);
+    }
+
+
+    //    public void setUpTransitions(){
+//        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP){
+//            Transition enterT = new Slide(Gravity.RIGHT);
+//            enterT.setDuration(500);
+//
+//            Transition exitT = new Slide(Gravity.LEFT);
+//            exitT.setDuration(300);
+//
+//            Fade fade = new Fade();
+//            fade.setDuration(500);
+//
+//            getWindow().setExitTransition(fade);
+//            getWindow().setReenterTransition(fade);
+//
+//        }
+//    }
+    @Override
+    protected int layoutRes() {
+        return R.layout.fragment_main;
+    }
+
+    public static MainFragment newInstance() {
+        return new MainFragment();
     }
 }

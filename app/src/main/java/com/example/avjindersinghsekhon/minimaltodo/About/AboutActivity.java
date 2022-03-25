@@ -1,5 +1,6 @@
 package com.example.avjindersinghsekhon.minimaltodo.About;
 
+import android.content.Intent;
 import android.content.pm.PackageInfo;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
@@ -11,6 +12,8 @@ import android.support.v4.app.NavUtils;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.Button;
 import android.widget.TextView;
 
 import com.example.avjindersinghsekhon.minimaltodo.Analytics.AnalyticsApplication;
@@ -20,16 +23,20 @@ import com.example.avjindersinghsekhon.minimaltodo.R;
 
 public class AboutActivity extends AppDefaultActivity {
 
-    String theme;
     private TextView mVersionTextView;
     private String appVersion = "0.1";
     private Toolbar toolbar;
     private TextView contactMe;
+    String theme;
     //    private UUID mId;
     private AnalyticsApplication app;
+    private Button addFeedback;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
+
         theme = getSharedPreferences(MainFragment.THEME_PREFERENCES, MODE_PRIVATE).getString(MainFragment.THEME_SAVED, MainFragment.LIGHTTHEME);
         if (theme.equals(MainFragment.DARKTHEME)) {
             Log.d("OskarSchindler", "One");
@@ -79,8 +86,20 @@ public class AboutActivity extends AppDefaultActivity {
                     NavUtils.navigateUpFromSameTask(this);
                 }
                 return true;
+            case R.id.addFeedback:
+                Intent intent = new Intent(this, FeedbackActivity.class);
+                startActivity(intent);
+                return true;
             default:
                 return super.onOptionsItemSelected(item);
+        }
+    }
+
+    public void addFeedback(View view) {
+        if (view.getId() == R.id.addFeedback) {
+
+            Intent intent = new Intent(this, FeedbackActivity.class);
+            startActivity(intent);
         }
     }
 }

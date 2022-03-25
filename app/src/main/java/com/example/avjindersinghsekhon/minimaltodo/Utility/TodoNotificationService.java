@@ -6,7 +6,6 @@ import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
-import android.net.Uri;
 import android.util.Log;
 
 import com.example.avjindersinghsekhon.minimaltodo.R;
@@ -40,13 +39,11 @@ public class TodoNotificationService extends IntentService {
                 .setContentTitle(mTodoText)
                 .setSmallIcon(R.drawable.ic_done_white_24dp)
                 .setAutoCancel(true)
-//                .setDefaults(Notification.DEFAULT_SOUND)
-                .setDefaults(Notification.DEFAULT_VIBRATE)
+                .setDefaults(Notification.DEFAULT_SOUND)
                 .setDeleteIntent(PendingIntent.getService(this, mTodoUUID.hashCode(), deleteIntent, PendingIntent.FLAG_UPDATE_CURRENT))
                 .setContentIntent(PendingIntent.getActivity(this, mTodoUUID.hashCode(), i, PendingIntent.FLAG_UPDATE_CURRENT))
                 .build();
-        notification.sound = Uri.parse("android.resource://"
-                + this.getPackageName() + "/" + R.raw.sound);
+
         manager.notify(100, notification);
 //        Uri defaultRingone = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
 //        MediaPlayer mp = new MediaPlayer();
