@@ -8,6 +8,14 @@ import java.util.Date;
 import java.util.UUID;
 
 public class ToDoItem implements Serializable {
+    private String mToDoText;
+    private boolean mHasReminder;
+    //add description
+    private String mToDoDescription;
+    //    private Date mLastEdited;
+    private int mTodoColor;
+    private Date mToDoDate;
+    private UUID mTodoIdentifier;
     //add description
     private static final String TODODESCRIPTION = "tododescription";
     private static final String TODOTEXT = "todotext";
@@ -16,17 +24,9 @@ public class ToDoItem implements Serializable {
     private static final String TODOCOLOR = "todocolor";
     private static final String TODODATE = "tododate";
     private static final String TODOIDENTIFIER = "todoidentifier";
-    private String mToDoText;
-    private boolean mHasReminder;
-    //add description
-    private String mToDoDescription;
-    //    private Date mLastEdited;
-    private int mTodoColor;
-    private Date mToDoDate;
-    private final UUID mTodoIdentifier;
 
 
-    public ToDoItem(String todoBody, String tododescription, boolean hasReminder, Date toDoDate) {
+    public ToDoItem(String todoBody,String tododescription,  boolean hasReminder, Date toDoDate) {
         mToDoText = todoBody;
         mHasReminder = hasReminder;
         mToDoDate = toDoDate;
@@ -51,10 +51,6 @@ public class ToDoItem implements Serializable {
         }
     }
 
-    public ToDoItem() {
-        this("Clean my room", "Sweep and Mop my Room", true, new Date());
-    }
-
     public JSONObject toJSON() throws JSONException {
         JSONObject jsonObject = new JSONObject();
         jsonObject.put(TODOTEXT, mToDoText);
@@ -70,13 +66,14 @@ public class ToDoItem implements Serializable {
         return jsonObject;
     }
 
-    public String getmToDoDescription() {
-        return mToDoDescription;
+
+    public ToDoItem() {
+        this("Clean my room","Sweep and Mop my Room", true, new Date());
     }
 
-    public void setmToDoDescription(String mToDoDescription) {
-        this.mToDoDescription = mToDoDescription;
-    }
+    public String getmToDoDescription() { return mToDoDescription;}
+
+    public void setmToDoDescription(String mToDoDescription){this.mToDoDescription = mToDoDescription;}
 
     public String getToDoText() {
         return mToDoText;
@@ -98,10 +95,6 @@ public class ToDoItem implements Serializable {
         return mToDoDate;
     }
 
-    public void setToDoDate(Date mToDoDate) {
-        this.mToDoDate = mToDoDate;
-    }
-
     public int getTodoColor() {
         return mTodoColor;
     }
@@ -109,6 +102,11 @@ public class ToDoItem implements Serializable {
     public void setTodoColor(int mTodoColor) {
         this.mTodoColor = mTodoColor;
     }
+
+    public void setToDoDate(Date mToDoDate) {
+        this.mToDoDate = mToDoDate;
+    }
+
 
     public UUID getIdentifier() {
         return mTodoIdentifier;

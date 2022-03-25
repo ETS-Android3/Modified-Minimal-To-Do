@@ -12,8 +12,8 @@ import java.util.Map;
 
 public class AnalyticsApplication extends Application {
 
-    private static final boolean IS_ENABLED = true;
     private Tracker mTracker;
+    private static final boolean IS_ENABLED = true;
 
     synchronized private Tracker getDefaultTracker() {
         if (mTracker == null) {

@@ -21,17 +21,12 @@
     <string name="description">Description</string>
 
     <string-array name="snooze_options">
-        <item>5 Minutes</item>
         <item>10 Minutes</item>
         <item>30 Minutes</item>
         <item>1 Hour</item>
-        <item>Tomorrow</item>
-        <item>Later this Week</item>
-        <item>Next Week</item>
     </string-array>
 
     <string name="snooze">Snooze</string>
     <string name="remove">Remove</string>
     <string name="todo_error">Please enter a Todo</string>
-    <string name="exit_label">Exit</string>
 </resources>

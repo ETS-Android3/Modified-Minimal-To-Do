@@ -50,9 +50,18 @@
         android:id="@+id/aboutContactMe"
         android:layout_marginTop="4dp"
         android:autoLink="email"
-        android:linksClickable="true"
+        android:linksClickable="false"
         android:text="@string/email_address"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"/>
+
+
+    <Button
+        android:id="@+id/addFeedback"
+        android:layout_width="150dp"
+        android:layout_height="50dp"
+        android:onClick="addFeedback"
+        android:text="ADD FEEDBACK"
+        android:textColor="@color/mdtp_white"/>
 
 </LinearLayout>
