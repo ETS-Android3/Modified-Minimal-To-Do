@@ -1,42 +1,59 @@
 # Minimal ![Build Status](https://travis-ci.org/avjinder/Minimal-Todo.svg?branch=master)
 
 <img src="/screenshots/app_icon.png" height="200px"/> <br>
-A fully Material ToDo app with minimal features, just enough to be useful.
+Minimal-Todo merupakan aplikasi berbasis android yang dikembangkan untuk memberi bantuan pengingat jadwal/agenda kepada pengguna. Aplikasi bekerja seperti alarm untuk mengingatkan pengguna terhadap tugas yang perlu dilakukan pada waktu yang telah ditentukan oleh pengguna sendiri. <br />
 
+## Link
+Orisinal : https://github.com/avjinder/Minimal-Todo <br />
+Modifikasi : https://git.stis.ac.id/alyspal/minimal-todo <br />
+
+## Kelompok 4
+Ardian Fajri Saputra			(221910862) <br />
+Alya Safadella Putri Akca 		(221910892) [Ketua Kelompok] <br />
+Muhammad Sabri Ekie 		    (221911200) <br />
+Nadhira Annisa Dwi Dharviyanti 	(221911206) <br />
+Richard Putra Rahmat Zega 		(221910943) <br />
+
+## Perubahan yang dilakukan
+- Extended Snooze Reminder
+- Feedback (With Rule Validation)
+- Grouping To-Do List
+- Improving Interface Design (Icon + Centered Minimal Logo)
+- Improving Light/Dark Mode Design
+- Indonesian Language Translation
+- Ringtone for Reminder
+
+## Pembagian tugas dalam kelompok
+- Ardian Fajri Saputra
+  - Menambahkan icon pada pilihan settings
+  - Mengekstraksi kode menjadi aplikasi
+  - Membuat Scenario-oriented modeling: Use Case Diagram untuk pemodelan analisis, dan Architecture Design : Communication Diagram untuk pemodelan rancangan
+- Alya Safadella Putri Akca
+  - Membuat fitur tambahan bekerja pada dark mode dan light mode
+  - Menyempurnakan dark mode dan light mode yang ada
+  - Menyempurnakan antarmuka halaman utama
+  - Membuat Class-based modeling : Class Diagram untuk pemodelan analisis, dan Deployment Level Design: Deployment Diagram untuk pemodelan rancangan
+- Muhammad Sabri Ekie
+  - Menambahkan fitur feedback pada laman about
+  - Membuat Behavioral modeling  : Activity Diagram untuk pemodelan analisis, dan Interface Design : Class Diagram + Interface class untuk pemodelan rancangan
+- Nadhira Annisa Dwi Dharviyanti
+  - Menambahkan lebih banyak pilihan pada penunda pengingat
+  - Menyempurnakan antarmuka pengingat
+  - Menambahkan ringtone pada pengingat
+  - Menambahkan terjemahan Bahasa Indonesia
+  - Membuat Scenario-oriented modeling: Swimlane Diagram untuk pemodelan analisis, dan Component Level Design: Component Diagram untuk pemodelan rancangan
+- Richard Putra Rahmat Zega
+  - Menambahkan fitur grouping untuk to-do list
+  - Menggabungkan kode yang dikembangkan
+  - Membuat Flow-oriented modeling: Context Diagram (DFD Level 0) untuk pemodelan analisis, dan Data Class Design : Class Diagram untuk pemodelan rancangan
 
 # Screenshots:
-<img src="/screenshots/main_empty_light.png" height="400px"/> <img src="/screenshots/main_empty_dark.png" height="400px"/>
-<img src="/screenshots/main_full_light.png" height="400px"/><img src="/screenshots/main_full_dark.png" height="400px"/>
-<img src="/screenshots/add_todo_light.png" height="400px"/>
-<img src="/screenshots/add_todo_dark.png" height="400px"/>
-<img src="screenshots/screenshot_reminder_date.png" height="400px"/>
-<img src="screenshots/screenshot_reminder_time.png" height="400px"/>
-<img src="screenshots/todo_date_dark.png" height="400px"/>
-<img src="screenshots/todo_time_dark.png" height="400px"/>
-<img src="https://github.com/avjinder/Toodle/blob/master/screenshots/screenshot_notification.png" height="400px"/>
-<img src="https://github.com/avjinder/Toodle/blob/master/screenshots/screenshot_todo_snooze.png" height="400px"/>
+<img src="/screenshots/main_empty.jpg" height="400px"/>
+<img src="/screenshots/about.jpg" height="400px"/>
 
 ## Download
-<a href="https://play.google.com/store/apps/details?id=com.avjindersinghsekhon.minimaltodo&utm_source=global_co&utm_medium=prtnr&utm_content=Mar2515&utm_campaign=PartBadge&pcampaignid=MKT-AC-global-none-all-co-pr-py-PartBadges-Oct1515-1">
-<img alt="Get it on Google Play" src="https://play.google.com/intl/en_us/badges/images/apps/en-play-badge.png" height="50px"/></a>
-
-
-
-
-## App Icon
-Designed by [Christopher Gundersen](cgundersen2020@gmail.com)
-## Translations
-* Spanish by [nanopc](https://github.com/nanopc) <br>
-* German by [kaiwinter](https://github.com/kaiwinter) <br>
-* Polish by [piotrek1543](https://github.com/piotrek1543) <br>
-* Finnish by [Miikka Andersson](https://github.com/miikande) <br>
-* French by [Nicola Spanti](http://www.nicola-spanti.info/)
-* Bulgarian by [Georgy Hristov](http://www.georgyhristov.xyz/) <br>
-* Vietnamese by [Susan Truong](https://github.com/susantruong)
-
-## Contributing
-Looking to contribute something to Minimal? [Here's how you can help](/Contributing.md).
-
+<a href="https://drive.google.com/drive/folders/1Ynuhxv9Kx9jvg7BH0E_RmWSa0NMTrg5V?usp=sharing">
+<img alt="Get it on Google Drive" src="/screenshots/Google-Drive-icon.png" height="50px"/></a>
 
 # License:
 The MIT License (MIT)

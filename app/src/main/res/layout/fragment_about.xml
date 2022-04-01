@@ -36,10 +36,54 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"/>
 
+    <!-- Team Name -->
+    <TextView
+        android:textSize="20sp"
+        android:gravity="center"
+        android:layout_marginTop="4dp"
+        android:text="@string/modified_by"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
     <TextView
         android:textSize="16sp"
         android:gravity="center"
         android:layout_marginTop="4dp"
+        android:text="Alya Safadella Putri Akca"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
+    <TextView
+        android:textSize="16sp"
+        android:gravity="center"
+        android:layout_marginTop="4dp"
+        android:text="Ardian Fajri Saputra"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
+    <TextView
+        android:textSize="16sp"
+        android:gravity="center"
+        android:layout_marginTop="4dp"
+        android:text="M. Sabri Ekie"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
+    <TextView
+        android:textSize="16sp"
+        android:gravity="center"
+        android:layout_marginTop="4dp"
+        android:text="Nadhira Annisa Dwi Dharviyanti"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
+    <TextView
+        android:textSize="16sp"
+        android:gravity="center"
+        android:layout_marginTop="4dp"
+        android:text="Richard Putra Rahmat Zega"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
+
+    <TextView
+        android:textSize="16sp"
+        android:gravity="center"
+        android:layout_marginTop="16dp"
         android:text="@string/contact_me"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"/>
@@ -50,18 +94,19 @@
         android:id="@+id/aboutContactMe"
         android:layout_marginTop="4dp"
         android:autoLink="email"
-        android:linksClickable="false"
+        android:linksClickable="true"
         android:text="@string/email_address"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"/>
 
-
     <Button
         android:id="@+id/addFeedback"
-        android:layout_width="150dp"
+        android:layout_width="163dp"
         android:layout_height="50dp"
+        android:layout_marginTop="16dp"
+        android:background="@drawable/button_pressed_background"
         android:onClick="addFeedback"
-        android:text="ADD FEEDBACK"
-        android:textColor="@color/mdtp_white"/>
+        android:text="@string/add_feedback"
+        android:textColor="@android:color/white" />
 
 </LinearLayout>

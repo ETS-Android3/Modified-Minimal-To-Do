@@ -24,19 +24,16 @@ import com.example.avjindersinghsekhon.minimaltodo.R;
 public class AboutActivity extends AppDefaultActivity {
 
     private TextView mVersionTextView;
-    private String appVersion = "0.1";
+    private String appVersion = "2.0";
     private Toolbar toolbar;
     private TextView contactMe;
     String theme;
     //    private UUID mId;
     private AnalyticsApplication app;
-    private Button addFeedback;
-
+    private Button addFeedback;    
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-
-
         theme = getSharedPreferences(MainFragment.THEME_PREFERENCES, MODE_PRIVATE).getString(MainFragment.THEME_SAVED, MainFragment.LIGHTTHEME);
         if (theme.equals(MainFragment.DARKTHEME)) {
             Log.d("OskarSchindler", "One");

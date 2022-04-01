@@ -46,7 +46,8 @@
                         android:inputType="textAutoCorrect|textCapSentences"
                         android:lines="2"
                         android:maxLines="3"
-                        android:textColor="@color/icons" />
+                        android:textColor="@color/icons"
+                        android:textColorHint="@color/icons" />
 
                 </com.example.avjindersinghsekhon.minimaltodo.Utility.CustomTextInputLayout>
 

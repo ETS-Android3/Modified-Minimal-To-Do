@@ -7,25 +7,28 @@
     android:padding="16dp"
     tools:context=".About.FeedbackActivity">
 
-
     <EditText
         android:id="@+id/email"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="avisekhon2@gmail.com"
-        android:enabled="false"/>
+        android:layout_marginTop="14dp"
+        android:lines="5"
+        android:editable="false"
+        android:hint="avisekhon2@gmail.com"/>
 
     <EditText
         android:id="@+id/subject"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginTop="14dp"
         android:lines="5"
-        android:hint="Subject"
+        android:hint="@string/subject_feedback"
         android:gravity="start|top"/>
 
     <View
         android:layout_width="match_parent"
         android:layout_height="2dp"
+        android:layout_marginTop="14dp"
         android:background="@color/primary"/>
 
 
@@ -33,15 +36,18 @@
         android:id="@+id/pesan"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginTop="14dp"
         android:lines="5"
-        android:hint="Message"
+        android:hint="@string/message"
         android:gravity="start|top"/>
 
     <Button
         android:id="@+id/btn_kirim"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="send"
-        android:textColor="@color/primary_light"/>
+        android:layout_marginTop="14dp"
+        android:text="@string/send"
+        android:background="@drawable/button_pressed_background"
+        android:textColor="@android:color/white"/>
 
 </LinearLayout>

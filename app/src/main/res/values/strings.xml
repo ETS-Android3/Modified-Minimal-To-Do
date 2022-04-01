@@ -21,12 +21,38 @@
     <string name="description">Description</string>
 
     <string-array name="snooze_options">
+        <item>5 Minutes</item>
         <item>10 Minutes</item>
         <item>30 Minutes</item>
         <item>1 Hour</item>
+        <item>Tomorrow</item>
+        <item>Later this Week</item>
+        <item>Next Week</item>
+    </string-array>
+
+
+    //R.edit Adding the spinner list from fragment_add_to_do_xml
+    <string name="ToDoSpinner">Choose the Topic</string>
+    <string-array name="Topic">
+        <item>Family</item>
+        <item>Work</item>
+        <item>Education</item>
+        <item>Health</item>
+        <item>Fun</item>
+        <item>Urgent</item>
     </string-array>
 
     <string name="snooze">Snooze</string>
     <string name="remove">Remove</string>
     <string name="todo_error">Please enter a Todo</string>
+    <string name="exit_label">Exit</string>
+    <string name="modified_by">Modified by Group 3</string>
+    <string name="add_feedback">ADD FEEDBACK</string>
+    <string name="subject_feedback">Subject</string>
+    <string name="message">Message</string>
+    <string name="send">send</string>
+    <string name="empty_error">This field can\'t be empty</string>
+    <string name="Deleted">Deleted </string>
+    <string name="topics_agenda">Topic\'s Agenda</string>
+    <string name="undo">UNDO</string>
 </resources>
